@@ -1,10 +1,12 @@
-package com.mydo.config;
+package com.MyDo.config;
 
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 import java.io.File;
 import java.io.FileReader;
+import java.io.IOException;
 
 public class Configurator {
     public static Object getVariable(String... keys) {
@@ -21,8 +23,8 @@ public class Configurator {
                     break;
                 }
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (ParseException | IOException e) {
+            throw new RuntimeException(e);
         }
         return variable;
     }
