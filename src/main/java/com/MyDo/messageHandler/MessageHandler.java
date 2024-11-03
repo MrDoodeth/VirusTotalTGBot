@@ -6,7 +6,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 public abstract class MessageHandler {
     protected final Bot bot;
 
-    public MessageHandler(Bot bot) {
+    MessageHandler(Bot bot) {
         this.bot = bot;
     }
 
