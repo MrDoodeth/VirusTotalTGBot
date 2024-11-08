@@ -65,6 +65,7 @@ public class Bot extends TelegramLongPollingBot {
     public Message sendMessage(long chatId, String textMessage) {
         SendMessage sendMessage = new SendMessage();
         sendMessage.setChatId(Long.toString(chatId));
+        sendMessage.enableMarkdown(true);
 
         //Ограничение TG на максимальную длинну
         final int MAX_LENGTH = 4096;

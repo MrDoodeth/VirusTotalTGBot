@@ -2,20 +2,22 @@ package com.MyDo.messageHandler;
 
 import com.MyDo.bot.Bot;
 import com.MyDo.config.Configurator;
+import com.MyDo.config.ReportBuilder;
 import org.json.JSONObject;
 import org.telegram.telegrambots.meta.api.methods.GetFile;
 import org.telegram.telegrambots.meta.api.objects.Document;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
-import java.io.*;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URI;
 import java.net.URL;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.UUID;
-import java.util.concurrent.TimeUnit;
 
 public class ServiceHandler extends MessageHandler {
 
@@ -39,11 +41,15 @@ public class ServiceHandler extends MessageHandler {
                 return;
             }
 
-            String scanningResult = getVirusTotalReport(fileName, fileId).toString();
+            JSONObject scanningResult = getVirusTotalReport(fileName, fileId);
 
-            //Логика обработки отчёта
+            String report;
+            if (scanningResult != null)
+                report = ReportBuilder.build(fileName, scanningResult);
+            else
+                report = Configurator.getText("messages", "error");
 
-            bot.sendMessage(chatId, scanningResult);
+            bot.sendMessage(chatId, report);
         }
     }
 
@@ -64,16 +70,24 @@ public class ServiceHandler extends MessageHandler {
                     .GET()
                     .build();
 
-            for (int i = 0; i < 10; i++) {
+            final int COUNT_OF_REPEAT = 40;
+
+            for (int i = 0; i < COUNT_OF_REPEAT; i++) {
                 System.out.println("Попытка №" + (i + 1));
+
                 HttpResponse<String> analysisResponse = client.send(analysisRequest, HttpResponse.BodyHandlers.ofString());
                 analysisResult = new JSONObject(analysisResponse.body());
 
-                if (analysisResult != null) {
-                    break;
-                }
+                String status = analysisResult.getJSONObject("data").getJSONObject("attributes").getString("status");
+                System.out.println(status);
 
-                TimeUnit.SECONDS.sleep(6);
+                if (status.equals("completed")) {
+                    break;
+                } else {
+                    analysisResult = null;
+                }
+                //Ждём, пока завершится анализ
+                Thread.sleep(7500);
             }
 
         } catch (IOException | InterruptedException | TelegramApiException e) {
@@ -99,7 +113,9 @@ public class ServiceHandler extends MessageHandler {
                 .POST(createMultipartBody(boundary, fileInputStream, fileName))
                 .build();
 
+        System.out.println("загружаю файл на VirusTotal");
         HttpResponse<String> uploadFileResponse = client.send(requestToPostFile, HttpResponse.BodyHandlers.ofString());
+        System.out.println("Загрузил");
         return new JSONObject(uploadFileResponse.body());
     }
 

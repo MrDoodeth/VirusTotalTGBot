@@ -14,11 +14,11 @@ public class CommandHandler extends MessageHandler {
         long chatId = update.getMessage().getChatId();
 
         if ("/start".equalsIgnoreCase(text)) {
-            bot.sendMessage(chatId, Configurator.getText("messages", "start"));
+            bot.sendMessage(chatId, Configurator.getText("commands", "start"));
         } else if (text.equalsIgnoreCase("/help")) {
             //return "Список доступных команд:\n/start - начать\n/help - помощь";
         } else {
-            bot.sendMessage(chatId, Configurator.getText("messages", "misunderstanding-command"));
+            bot.sendMessage(chatId, Configurator.getText("commands", "misunderstanding-command"));
         }
     }
 }
