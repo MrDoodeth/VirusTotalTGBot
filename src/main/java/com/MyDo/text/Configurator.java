@@ -1,4 +1,6 @@
-package com.MyDo.config;
+package com.MyDo.text;
+
+import com.MyDo.tool.JsonReader;
 
 import java.io.File;
 
@@ -13,6 +15,6 @@ public class Configurator {
             .append("config.json");
 
     public static String getText(String... keys) {
-        return JsonReaderTool.getVariableOfFile(path, keys).toString();
+        return JsonReader.getVariableOfFile(path, keys).toString();
     }
 }

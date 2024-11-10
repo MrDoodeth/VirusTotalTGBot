@@ -1,6 +1,5 @@
 package com.MyDo.bot;
 
-import com.MyDo.config.Configurator;
 import com.MyDo.messageHandler.CommandHandler;
 import com.MyDo.messageHandler.MessageHandler;
 import com.MyDo.messageHandler.ServiceHandler;
@@ -12,9 +11,21 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 
 public class Bot extends TelegramLongPollingBot {
+
+    private static Bot INSTANCE;
+
+    public static Bot getINSTANCE() {
+        return INSTANCE;
+    }
+
+    public static void setINSTANCE(Bot INSTANCE) {
+        if (Bot.INSTANCE == null) {
+            Bot.INSTANCE = INSTANCE;
+        }
+    }
+
     private final String apiBotToken;
     private final String botUsername;
-
     private final String virusTotalApiToken;
 
     public Bot(String apiBotToken, String botUsername, String virusTotalApiToken) {
@@ -42,20 +53,14 @@ public class Bot extends TelegramLongPollingBot {
 
         if (update.hasMessage()) {
             Message message = update.getMessage();
-            Long chatId = message.getChatId();
             String text = message.getText();
 
             MessageHandler messageHandler;
 
-            //Заглушка, т. к. я всё перепробовал и он не выносит логику обработки текста в ServiceHandler
-            if ((!message.hasDocument() && text.charAt(0) != '/')) {
-                sendMessage(chatId, Configurator.getText("messages", "misunderstanding-text"));
-            }
-
             if (text != null && text.charAt(0) == '/') {
-                messageHandler = new CommandHandler(this);
+                messageHandler = new CommandHandler();
             } else {
-                messageHandler = new ServiceHandler(this);
+                messageHandler = new ServiceHandler();
             }
 
             messageHandler.getResponse(update);

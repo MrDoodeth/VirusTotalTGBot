@@ -11,7 +11,8 @@ public class Program {
 
     public static void main(String[] args) throws TelegramApiException {
         TelegramBotsApi botsApi = new TelegramBotsApi(DefaultBotSession.class);
-        botsApi.registerBot(new Bot(API_TOKEN, BOT_USERNAME, VIRUS_TOTAL_API_TOKEN));
+        Bot.setINSTANCE(new Bot(API_TOKEN, BOT_USERNAME, VIRUS_TOTAL_API_TOKEN));
+        botsApi.registerBot(Bot.getINSTANCE());
         System.out.println("Bot started");
     }
 }

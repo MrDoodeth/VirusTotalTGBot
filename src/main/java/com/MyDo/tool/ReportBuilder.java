@@ -1,16 +1,18 @@
-package com.MyDo.config;
+package com.MyDo.tool;
 
 import org.json.JSONObject;
 
-public class ReportBuilder {
-    public static String build(String fileName, JSONObject jsonReport) {
+import static com.MyDo.text.Configurator.getText;
+
+public abstract class ReportBuilder {
+    public static String build(String entityName, JSONObject jsonReport) {
         JSONObject data = jsonReport.getJSONObject("data");
         JSONObject stats = data.getJSONObject("attributes").getJSONObject("stats");
         JSONObject results = data.getJSONObject("attributes").getJSONObject("results");
 
         StringBuilder report = new StringBuilder()
                 .append('*')
-                .append(fileName)
+                .append(entityName)
                 .append('*')
                 .append("\r\n");
 
@@ -22,7 +24,7 @@ public class ReportBuilder {
             }
 
             report
-                    .append(Configurator.getText("report", key))
+                    .append(getText("report", key))
                     .append('*')
                     .append(stats.getInt(key))
                     .append('*')
@@ -30,15 +32,16 @@ public class ReportBuilder {
         }
 
         //Перегородка
+        final int COUNT = 25;
         report
-                .append("=========================")
+                .append("=".repeat(COUNT))
                 .append("\r\n");
 
 
         //Выводит результат
         for (String key : results.keySet()) {
             report
-                    .append(Configurator.getText("report", results.getJSONObject(key).getString("category")).charAt(0))
+                    .append(getText("report", results.getJSONObject(key).getString("category")).charAt(0))
                     .append('*')
                     .append(key)
                     .append('*')
