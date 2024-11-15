@@ -9,8 +9,8 @@ import java.nio.charset.StandardCharsets;
 
 public abstract class HttpBodyBuilder {
     public static HttpRequest.BodyPublisher createMultipart(String boundary, InputStream fileInputStream, String fileName) throws IOException {
-        var byteArrayOutputStream = new ByteArrayOutputStream();
-        byte[] fileBytes = fileInputStream.readAllBytes();
+        final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        final byte[] fileBytes = fileInputStream.readAllBytes();
 
         byteArrayOutputStream.write(("--" + boundary + "\r\n").getBytes());
         byteArrayOutputStream.write(("Content-Disposition: form-data; name=\"file\"; filename=\"" + fileName + "\"\r\n").getBytes());

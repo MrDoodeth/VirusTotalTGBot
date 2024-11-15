@@ -14,8 +14,7 @@ import java.net.http.HttpResponse;
 public abstract class Analyzer {
 
     public static JSONObject getVirusTotalReport(Uploader uploader) {
-
-        HttpClient client = HttpClient.newHttpClient();
+        final HttpClient client = HttpClient.newHttpClient();
         JSONObject analysisResult = null;
 
         try {
@@ -40,9 +39,6 @@ public abstract class Analyzer {
 
                 HttpResponse<String> analysisResponse = client.send(analysisRequest, HttpResponse.BodyHandlers.ofString());
                 analysisResult = new JSONObject(analysisResponse.body());
-
-                System.out.println(analysisResponse.body());
-                System.out.println(analysisResponse.statusCode());
 
                 String status = analysisResult.getJSONObject("data").getJSONObject("attributes").getString("status");
                 System.out.println(status);

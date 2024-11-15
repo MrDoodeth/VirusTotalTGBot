@@ -1,12 +1,12 @@
 package com.MyDo.messageHandler;
 
-import com.MyDo.tool.Analyzer;
-import com.MyDo.uploader.Uploader;
-import com.MyDo.uploader.FileUploader;
-import com.MyDo.uploader.UrlUploader;
 import com.MyDo.bot.Bot;
+import com.MyDo.tool.Analyzer;
 import com.MyDo.tool.ReportBuilder;
 import com.MyDo.tool.UrlValidator;
+import com.MyDo.uploader.FileUploader;
+import com.MyDo.uploader.Uploader;
+import com.MyDo.uploader.UrlUploader;
 import org.json.JSONObject;
 import org.telegram.telegrambots.meta.api.objects.Document;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -20,11 +20,9 @@ public class ServiceHandler implements MessageHandler {
         final long chatId = update.getMessage().getChatId();
         final String text = update.getMessage().getText();
         final String entityName;
-
-        Uploader uploader;
+        final Uploader uploader;
 
         if (update.getMessage().hasDocument()) {
-
             final Document document = update.getMessage().getDocument();
             final String fileName = document.getFileName();
             final String fileId = document.getFileId();
@@ -51,7 +49,7 @@ public class ServiceHandler implements MessageHandler {
 
         JSONObject scanningResult = Analyzer.getVirusTotalReport(uploader);
 
-        String report;
+        final String report;
         if (scanningResult != null)
             report = ReportBuilder.build(entityName, scanningResult);
         else

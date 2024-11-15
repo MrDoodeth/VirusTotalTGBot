@@ -28,12 +28,12 @@ public class FileUploader implements Uploader {
     @Override
     public JSONObject uploadOnVirusTotal() throws TelegramApiException, IOException, InterruptedException {
 
-        HttpClient client = HttpClient.newHttpClient();
-        String boundary = UUID.randomUUID().toString();
-        String fileUrl = getFileTGUrl();
-        InputStream fileInputStream = new URL(fileUrl).openStream();
+        final HttpClient client = HttpClient.newHttpClient();
+        final String boundary = UUID.randomUUID().toString();
+        final String fileUrl = getFileTGUrl();
+        final InputStream fileInputStream = new URL(fileUrl).openStream();
 
-        HttpRequest requestToPostFile = HttpRequest.newBuilder()
+        final HttpRequest requestToPostFile = HttpRequest.newBuilder()
                 .uri(URI.create("https://www.virustotal.com/api/v3/files"))
                 .header("accept", "application/json")
                 .header("x-apikey", Bot.getINSTANCE().getVirusTotalApiToken())
@@ -50,9 +50,7 @@ public class FileUploader implements Uploader {
     private String getFileTGUrl() throws TelegramApiException {
         GetFile getFileRequest = new GetFile();
         getFileRequest.setFileId(fileId);
-
         org.telegram.telegrambots.meta.api.objects.File file = Bot.getINSTANCE().execute(getFileRequest);
-
         return "https://api.telegram.org/file/bot" + Bot.getINSTANCE().getBotToken() + "/" + file.getFilePath();
     }
 }

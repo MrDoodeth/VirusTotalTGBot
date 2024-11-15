@@ -20,7 +20,7 @@ public class UrlUploader implements Uploader {
 
     @Override
     public JSONObject uploadOnVirusTotal() throws IOException, InterruptedException {
-        HttpClient client = HttpClient.newHttpClient();
+        final HttpClient client = HttpClient.newHttpClient();
 
         HttpRequest requestToPostUrl = HttpRequest.newBuilder()
                 .uri(URI.create("https://www.virustotal.com/api/v3/urls"))

@@ -11,18 +11,7 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 
 public class Bot extends TelegramLongPollingBot {
-
     private static Bot INSTANCE;
-
-    public static Bot getINSTANCE() {
-        return INSTANCE;
-    }
-
-    public static void setINSTANCE(Bot INSTANCE) {
-        if (Bot.INSTANCE == null) {
-            Bot.INSTANCE = INSTANCE;
-        }
-    }
 
     private final String apiBotToken;
     private final String botUsername;
@@ -32,6 +21,16 @@ public class Bot extends TelegramLongPollingBot {
         this.apiBotToken = apiBotToken;
         this.botUsername = botUsername;
         this.virusTotalApiToken = virusTotalApiToken;
+    }
+
+    public static Bot getINSTANCE() {
+        return INSTANCE;
+    }
+
+    public static void setINSTANCE(Bot INSTANCE) {
+        if (Bot.INSTANCE == null) {
+            Bot.INSTANCE = INSTANCE;
+        }
     }
 
     @Override
@@ -50,11 +49,8 @@ public class Bot extends TelegramLongPollingBot {
 
     @Override
     public void onUpdateReceived(Update update) {
-
         if (update.hasMessage()) {
-            Message message = update.getMessage();
-            String text = message.getText();
-
+            String text = update.getMessage().getText();
             MessageHandler messageHandler;
 
             if (text != null && text.charAt(0) == '/') {
