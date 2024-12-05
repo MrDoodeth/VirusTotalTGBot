@@ -13,6 +13,9 @@ import java.net.http.HttpResponse;
 
 public abstract class Analyzer {
 
+    private static final int COUNT_OF_REPEAT = 20; // Проверка MAX = 5 min
+    private static final int WAIT_TIME = 15_000; //Ограничение API = 4 lookups / min
+
     public static JSONObject getVirusTotalReport(Uploader uploader) {
         final HttpClient client = HttpClient.newHttpClient();
         JSONObject analysisResult = null;
@@ -29,11 +32,9 @@ public abstract class Analyzer {
                     .GET()
                     .build();
 
-            final int COUNT_OF_REPEAT = 20; // Проверка MAX = 5 min
-            final int WAIT_TIME = 15_000; //Ограничение API = 4 lookups / min
-
             for (int i = 0; i < COUNT_OF_REPEAT; i++) {
                 System.out.println("Попытка №" + (i + 1));
+
                 //Ждём, пока завершится анализ
                 Thread.sleep(WAIT_TIME);
 

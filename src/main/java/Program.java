@@ -1,4 +1,5 @@
 import com.MyDo.bot.Bot;
+import com.MyDo.config.Config;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
@@ -13,6 +14,9 @@ public class Program {
         TelegramBotsApi botsApi = new TelegramBotsApi(DefaultBotSession.class);
         Bot.setINSTANCE(new Bot(API_TOKEN, BOT_USERNAME, VIRUS_TOTAL_API_TOKEN));
         botsApi.registerBot(Bot.getINSTANCE());
+
+        Config.Init();
+
         System.out.println("Bot started");
     }
 }

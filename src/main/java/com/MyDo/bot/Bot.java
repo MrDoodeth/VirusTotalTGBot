@@ -1,5 +1,6 @@
 package com.MyDo.bot;
 
+import com.MyDo.locker.AccessChecker;
 import com.MyDo.messageHandler.CommandHandler;
 import com.MyDo.messageHandler.MessageHandler;
 import com.MyDo.messageHandler.ServiceHandler;
@@ -52,6 +53,8 @@ public class Bot extends TelegramLongPollingBot {
         if (update.hasMessage()) {
             String text = update.getMessage().getText();
             MessageHandler messageHandler;
+
+            // AccessChecker.Check(update);
 
             if (text != null && text.charAt(0) == '/') {
                 messageHandler = new CommandHandler();

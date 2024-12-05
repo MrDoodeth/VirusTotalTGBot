@@ -1,7 +1,7 @@
 package com.MyDo.messageHandler;
 
 import com.MyDo.bot.Bot;
-import com.MyDo.text.Configurator;
+import com.MyDo.config.Config;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 public class CommandHandler implements MessageHandler {
@@ -12,11 +12,11 @@ public class CommandHandler implements MessageHandler {
         long chatId = update.getMessage().getChatId();
 
         if ("/start".equalsIgnoreCase(text)) {
-            Bot.getINSTANCE().sendMessage(chatId, Configurator.getText("commands", "start"));
+            Bot.getINSTANCE().sendMessage(chatId, Config.getINSTANCE().getCommands().getStart());
         } else if (text.equalsIgnoreCase("/help")) {
-            //return "Список доступных команд:\n/start - начать\n/help - помощь";
+            Bot.getINSTANCE().sendMessage(chatId, Config.getINSTANCE().getCommands().getHelp());
         } else {
-            Bot.getINSTANCE().sendMessage(chatId, Configurator.getText("commands", "misunderstanding-command"));
+            Bot.getINSTANCE().sendMessage(chatId, Config.getINSTANCE().getCommands().getMisunderstanding());
         }
     }
 }

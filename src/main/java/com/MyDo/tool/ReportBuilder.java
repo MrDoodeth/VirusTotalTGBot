@@ -1,10 +1,14 @@
 package com.MyDo.tool;
 
+import com.MyDo.config.Config;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.json.JSONObject;
 
-import static com.MyDo.text.Configurator.getText;
+import java.util.Map;
 
 public abstract class ReportBuilder {
+    private static final int COUNT = 25;
+
     public static String build(String entityName, JSONObject jsonReport) {
         JSONObject data = jsonReport.getJSONObject("data");
         JSONObject stats = data.getJSONObject("attributes").getJSONObject("stats");
@@ -16,7 +20,11 @@ public abstract class ReportBuilder {
                 .append('*')
                 .append("\r\n");
 
+        ObjectMapper mapper = new ObjectMapper();
+
         //Выводит справку
+        Map<String, String> reportMap = mapper.convertValue(Config.getINSTANCE().getReport(), Map.class);
+
         for (String key : stats.keySet()) {
             //Исключения
             if (key.equals("confirmed-timeout")) {
@@ -24,7 +32,7 @@ public abstract class ReportBuilder {
             }
 
             report
-                    .append(getText("report", key))
+                    .append(reportMap.get(key))
                     .append('*')
                     .append(stats.getInt(key))
                     .append('*')
@@ -32,7 +40,6 @@ public abstract class ReportBuilder {
         }
 
         //Перегородка
-        final int COUNT = 25;
         report
                 .append("=".repeat(COUNT))
                 .append("\r\n");
@@ -41,7 +48,7 @@ public abstract class ReportBuilder {
         //Выводит результат
         for (String key : results.keySet()) {
             report
-                    .append(getText("report", results.getJSONObject(key).getString("category")).charAt(0))
+                    .append(reportMap.get(results.getJSONObject(key).getString("category")).charAt(0))
                     .append('*')
                     .append(key)
                     .append('*')

@@ -22,7 +22,7 @@
         <dependency>
             <groupId>org.telegram</groupId>
             <artifactId>telegrambots</artifactId>
-            <version>6.0.1</version>
+            <version>${telegram.version}</version>
         </dependency>
         <dependency>
             <groupId>org.telegram</groupId>
@@ -30,20 +30,12 @@
             <version>${telegram.version}</version>
         </dependency>
 
-        <!-- Simple Json -->
+        <!-- Jackson JSON    -->
         <dependency>
-            <groupId>com.googlecode.json-simple</groupId>
-            <artifactId>json-simple</artifactId>
-            <version>1.1</version>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.13.4.2</version>
         </dependency>
-
-        <!-- HTTP -->
-        <dependency>
-            <groupId>org.apache.httpcomponents</groupId>
-            <artifactId>httpclient</artifactId>
-            <version>4.5.13</version>
-        </dependency>
-
     </dependencies>
 
     <build>
