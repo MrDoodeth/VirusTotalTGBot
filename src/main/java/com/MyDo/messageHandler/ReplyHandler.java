@@ -3,6 +3,7 @@ package com.MyDo.messageHandler;
 import com.MyDo.bot.Bot;
 import com.MyDo.config.Config;
 import com.MyDo.locker.AccessChecker;
+import com.MyDo.locker.UserStatus;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 public class ReplyHandler implements MessageHandler {
@@ -12,11 +13,11 @@ public class ReplyHandler implements MessageHandler {
 
         if (update.getCallbackQuery().getData().equals("check")) {
 
-            boolean access = AccessChecker.check(update);
+            UserStatus userStatus = AccessChecker.check(update);
 
-            if (access) {
+            if (userStatus == UserStatus.ACCESS) {
                 Bot.getINSTANCE().sendMessage(chatId, Config.getINSTANCE().getMessages().getMeetCondition());
-            } else {
+            } else if (userStatus == UserStatus.FORBIDDEN) {
                 Bot.getINSTANCE().sendMessage(chatId, Config.getINSTANCE().getMessages().getNotMeetCondition());
             }
         }

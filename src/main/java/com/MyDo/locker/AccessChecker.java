@@ -14,17 +14,23 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 public class AccessChecker {
     private static final ArrayList<Config.Chat> chatList = new ObjectMapper().convertValue(Config.getINSTANCE().getChats(), new TypeReference<>() {
     });
 
-    public static boolean check(Update update) {
+    public static UserStatus check(Update update) {
 
-        boolean access = true;
+        UserStatus userStatus = UserStatus.ACCESS;
         final long userId = update.hasCallbackQuery() ? update.getCallbackQuery().getFrom().getId() : update.getMessage().getFrom().getId();
-
         UserData.addUserID(userId);
+
+        Set<Long> blackListUsers = new ObjectMapper().convertValue(Config.getINSTANCE().getBlackList(), new TypeReference<>() {});
+        if (blackListUsers.contains(userId)) {
+            userStatus = UserStatus.BLOCKED;
+            return userStatus;
+        }
 
         //Проверка на присутствие в каналах
         for (Config.Chat chat : chatList) {
@@ -34,7 +40,7 @@ public class AccessChecker {
                 String status = chatMember.getStatus();
                 System.out.println(status);
                 if (status.equals("left") || status.equals("kicked")) {
-                    access = false;
+                    userStatus = UserStatus.FORBIDDEN;
                     break;
                 }
             } catch (TelegramApiException e) {
@@ -42,7 +48,7 @@ public class AccessChecker {
             }
         }
 
-        return access;
+        return userStatus;
     }
 
     public static void sendRequirementsMessage(long userChatId) {

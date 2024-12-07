@@ -1,6 +1,8 @@
 package com.MyDo.bot;
 
+import com.MyDo.config.Config;
 import com.MyDo.locker.AccessChecker;
+import com.MyDo.locker.UserStatus;
 import com.MyDo.messageHandler.CommandHandler;
 import com.MyDo.messageHandler.MessageHandler;
 import com.MyDo.messageHandler.ReplyHandler;
@@ -59,20 +61,25 @@ public class Bot extends TelegramLongPollingBot {
 
         if (update.hasMessage()) {
             //Проверка на доступ к боту
-            boolean access = AccessChecker.check(update);
+            UserStatus userStatus = AccessChecker.check(update);
 
             String text = update.getMessage().getText();
+            final long userChatId = update.getMessage().getChatId();
 
-            if (access) {
-                if (text != null && update.getMessage().isCommand()) {
-                    messageHandler = new CommandHandler();
-                } else {
-                    messageHandler = new ServiceHandler();
-                }
-            }
-            else {
-                final long userChatId =  update.getMessage().getChatId();
-                AccessChecker.sendRequirementsMessage(userChatId);
+            switch (userStatus) {
+                case ACCESS:
+                    if (text != null && update.getMessage().isCommand()) {
+                        messageHandler = new CommandHandler();
+                    } else {
+                        messageHandler = new ServiceHandler();
+                    }
+                    break;
+                case FORBIDDEN:
+                    AccessChecker.sendRequirementsMessage(userChatId);
+                    break;
+                case BLOCKED:
+                    Bot.getINSTANCE().sendMessage(userChatId, Config.getINSTANCE().getMessages().getBlackList());
+                    break;
             }
         }
 
