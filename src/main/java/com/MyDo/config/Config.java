@@ -1,17 +1,18 @@
 package com.MyDo.config;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import java.io.File;
+import java.nio.file.Path;
 import java.util.List;
 
 public class Config {
-    private static final String path = "src/main/resources/config.json";
+    private static final Path path = Path.of("src", "main", "resources", "config.json");
 
-    public static void Init() {
+    public static void init() {
         ObjectMapper mapper = new ObjectMapper();
         try {
-            Config config = mapper.readValue(new File(path), Config.class);
+            Config config = mapper.readValue(path.toFile(), Config.class);
             Config.setINSTANCE(config);
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -43,10 +44,10 @@ public class Config {
     private List<Chat> chats;
 
     @JsonProperty("admin-id")
-    private List<Integer> adminIds;
+    private List<Long> adminIds;
 
     @JsonProperty("black-list")
-    private List<Integer> blackList;
+    private List<Long> blackList;
 
     public Messages getMessages() {
         return messages;
@@ -64,23 +65,21 @@ public class Config {
         return chats;
     }
 
-    public List<Integer> getAdminIds() {
+    public List<Long> getAdminIds() {
         return adminIds;
     }
 
-    public List<Integer> getBlackList() {
+    public List<Long> getBlackList() {
         return blackList;
     }
 
     public static class Messages {
-        @JsonProperty("fail")
-        private String fail;
 
         @JsonProperty("waiting")
         private String waiting;
 
         @JsonProperty("misunderstanding")
-        private String misunderstandingText;
+        private String misunderstanding;
 
         @JsonProperty("too-large-file")
         private String tooLargeFile;
@@ -91,22 +90,27 @@ public class Config {
         @JsonProperty("condition")
         private String condition;
 
+        @JsonProperty("chanel")
+        private String chanel;
+
+        @JsonProperty("check")
+        private String check;
+
         @JsonProperty("meet-condition")
         private String meetCondition;
 
+        @JsonProperty("not-meet-condition")
+        private String notMeetCondition;
+
         @JsonProperty("black-list")
         private String blackList;
-
-        public String getFail() {
-            return fail;
-        }
 
         public String getWaiting() {
             return waiting;
         }
 
         public String getMisunderstanding() {
-            return misunderstandingText;
+            return misunderstanding;
         }
 
         public String getTooLargeFile() {
@@ -121,8 +125,20 @@ public class Config {
             return condition;
         }
 
+        public String getCheck() {
+            return check;
+        }
+
+        public String getChanel() {
+            return chanel;
+        }
+
         public String getMeetCondition() {
             return meetCondition;
+        }
+
+        public String getNotMeetCondition() {
+            return notMeetCondition;
         }
 
         public String getBlackList() {
@@ -135,7 +151,7 @@ public class Config {
         private String start;
 
         @JsonProperty("misunderstanding")
-        private String misunderstandingCommand;
+        private String misunderstanding;
 
         @JsonProperty("help")
         private String help;
@@ -145,7 +161,7 @@ public class Config {
         }
 
         public String getMisunderstanding() {
-            return misunderstandingCommand;
+            return misunderstanding;
         }
 
         public String getHelp() {
@@ -174,34 +190,6 @@ public class Config {
 
         @JsonProperty("timeout")
         private String timeout;
-
-        public String getMalicious() {
-            return malicious;
-        }
-
-        public String getTypeUnsupported() {
-            return typeUnsupported;
-        }
-
-        public String getFailure() {
-            return failure;
-        }
-
-        public String getUndetected() {
-            return undetected;
-        }
-
-        public String getSuspicious() {
-            return suspicious;
-        }
-
-        public String getHarmless() {
-            return harmless;
-        }
-
-        public String getTimeout() {
-            return timeout;
-        }
     }
 
     public static class Chat {
