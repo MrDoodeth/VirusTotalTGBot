@@ -9,6 +9,7 @@ import com.MyDo.uploader.FileUploader;
 import com.MyDo.uploader.Uploader;
 import com.MyDo.uploader.UrlUploader;
 import org.json.JSONObject;
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Document;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
@@ -54,6 +55,8 @@ public class ServiceHandler implements MessageHandler {
         else
             report = Config.getINSTANCE().getMessages().getError();
 
-        Bot.getINSTANCE().sendMessage(chatId, report);
+        SendMessage sendMessage = new SendMessage();
+        sendMessage.disableWebPagePreview();
+        Bot.getINSTANCE().sendMessage(chatId, report, sendMessage);
     }
 }

@@ -6,7 +6,7 @@ import org.json.JSONObject;
 
 import java.util.Map;
 
-public abstract class ReportBuilder {
+public class ReportBuilder {
     private static final int COUNT = 25;
 
     public static String build(String entityName, JSONObject jsonReport) {
@@ -21,10 +21,9 @@ public abstract class ReportBuilder {
                 .append("\r\n");
 
         ObjectMapper mapper = new ObjectMapper();
-
-        //Выводит справку
         Map<String, String> reportMap = mapper.convertValue(Config.getINSTANCE().getReport(), Map.class);
 
+        //Выводит справку
         for (String key : stats.keySet()) {
             //Исключения
             if (key.equals("confirmed-timeout")) {
@@ -49,6 +48,7 @@ public abstract class ReportBuilder {
         for (String key : results.keySet()) {
             report
                     .append(reportMap.get(results.getJSONObject(key).getString("category")).charAt(0))
+                    .append(' ')
                     .append('*')
                     .append(key)
                     .append('*')

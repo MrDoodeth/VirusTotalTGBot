@@ -7,7 +7,7 @@ import java.net.URLEncoder;
 import java.net.http.HttpRequest;
 import java.nio.charset.StandardCharsets;
 
-public abstract class HttpBodyBuilder {
+public class HttpBodyBuilder {
     public static HttpRequest.BodyPublisher createMultipart(String boundary, InputStream fileInputStream, String fileName) throws IOException {
         final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         final byte[] fileBytes = fileInputStream.readAllBytes();

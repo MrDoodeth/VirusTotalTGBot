@@ -11,7 +11,7 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
-public abstract class Analyzer {
+public class Analyzer {
 
     private static final int COUNT_OF_REPEAT = 20; // Проверка MAX = 5 min
     private static final int WAIT_TIME = 15_000; //Ограничение API = 4 lookups / min
