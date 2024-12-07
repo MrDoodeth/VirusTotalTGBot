@@ -3,6 +3,7 @@ package com.MyDo.bot;
 import com.MyDo.locker.AccessChecker;
 import com.MyDo.messageHandler.CommandHandler;
 import com.MyDo.messageHandler.MessageHandler;
+import com.MyDo.messageHandler.ReplyHandler;
 import com.MyDo.messageHandler.ServiceHandler;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -50,24 +51,55 @@ public class Bot extends TelegramLongPollingBot {
 
     @Override
     public void onUpdateReceived(Update update) {
+        MessageHandler messageHandler = null;
+
+        if (update.hasCallbackQuery()) {
+            messageHandler = new ReplyHandler();
+        }
+
         if (update.hasMessage()) {
+            //Проверка на доступ к боту
+            boolean access = AccessChecker.check(update);
+
             String text = update.getMessage().getText();
-            MessageHandler messageHandler;
 
-            // AccessChecker.Check(update);
-
-            if (text != null && text.charAt(0) == '/') {
-                messageHandler = new CommandHandler();
-            } else {
-                messageHandler = new ServiceHandler();
+            if (access) {
+                if (text != null && update.getMessage().isCommand()) {
+                    messageHandler = new CommandHandler();
+                } else {
+                    messageHandler = new ServiceHandler();
+                }
             }
+            else {
+                final long userChatId =  update.getMessage().getChatId();
+                AccessChecker.sendRequirementsMessage(userChatId);
+            }
+        }
 
+        if (messageHandler != null) {
             messageHandler.getResponse(update);
         }
     }
 
     public Message sendMessage(long chatId, String textMessage) {
         SendMessage sendMessage = new SendMessage();
+        sendMessage.setChatId(Long.toString(chatId));
+        sendMessage.enableMarkdown(true);
+
+        //Ограничение TG на максимальную длинну
+        final int MAX_LENGTH = 4096;
+        textMessage = textMessage.length() > MAX_LENGTH ? textMessage.substring(0, MAX_LENGTH) : textMessage;
+        sendMessage.setText(textMessage);
+
+        try {
+            return execute(sendMessage);
+        } catch (TelegramApiException e) {
+            System.out.println(e.getMessage());
+        }
+        return null;
+    }
+
+    public Message sendMessage(long chatId, String textMessage, SendMessage sendMessage) {
         sendMessage.setChatId(Long.toString(chatId));
         sendMessage.enableMarkdown(true);
 
