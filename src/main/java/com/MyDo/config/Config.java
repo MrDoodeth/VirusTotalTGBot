@@ -156,6 +156,15 @@ public class Config {
         @JsonProperty("help")
         private String help;
 
+        @JsonProperty("admin")
+        private String admin;
+
+        @JsonProperty("not-admin")
+        private String notAdmin;
+
+        @JsonProperty("users-id")
+        private String usersId;
+
         public String getStart() {
             return start;
         }
@@ -166,6 +175,18 @@ public class Config {
 
         public String getHelp() {
             return help;
+        }
+
+        public String getAdmin() {
+            return admin;
+        }
+
+        public String getNotAdmin() {
+            return notAdmin;
+        }
+
+        public String getUsersId() {
+            return usersId;
         }
     }
 

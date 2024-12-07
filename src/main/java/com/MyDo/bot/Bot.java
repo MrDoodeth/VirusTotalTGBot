@@ -8,10 +8,14 @@ import com.MyDo.messageHandler.MessageHandler;
 import com.MyDo.messageHandler.ReplyHandler;
 import com.MyDo.messageHandler.ServiceHandler;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
+import org.telegram.telegrambots.meta.api.methods.send.SendDocument;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.objects.InputFile;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+
+import java.nio.file.Path;
 
 
 public class Bot extends TelegramLongPollingBot {
@@ -61,24 +65,24 @@ public class Bot extends TelegramLongPollingBot {
 
         if (update.hasMessage()) {
             //Проверка на доступ к боту
-            UserStatus userStatus = AccessChecker.check(update);
+            UserStatus userStatus = AccessChecker.checkStatus(update);
 
             String text = update.getMessage().getText();
             final long userChatId = update.getMessage().getChatId();
 
             switch (userStatus) {
-                case ACCESS:
-                    if (text != null && update.getMessage().isCommand()) {
-                        messageHandler = new CommandHandler();
-                    } else {
-                        messageHandler = new ServiceHandler();
-                    }
-                    break;
                 case FORBIDDEN:
                     AccessChecker.sendRequirementsMessage(userChatId);
                     break;
                 case BLOCKED:
                     Bot.getINSTANCE().sendMessage(userChatId, Config.getINSTANCE().getMessages().getBlackList());
+                    break;
+                default:
+                    if (text != null && update.getMessage().isCommand()) {
+                        messageHandler = new CommandHandler();
+                    } else {
+                        messageHandler = new ServiceHandler();
+                    }
                     break;
             }
         }
@@ -121,5 +125,16 @@ public class Bot extends TelegramLongPollingBot {
             System.out.println(e.getMessage());
         }
         return null;
+    }
+
+    public void sendDocument(long chatId, Path filePath) {
+        SendDocument sendDocument = new SendDocument();
+        sendDocument.setChatId(Long.toString(chatId));
+        sendDocument.setDocument(new InputFile(filePath.toFile()));
+        try {
+            execute(sendDocument);
+        } catch (TelegramApiException e) {
+            System.out.println(e.getMessage());
+        }
     }
 }

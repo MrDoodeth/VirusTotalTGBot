@@ -36,7 +36,7 @@ public class Analyzer {
                 System.out.println("Попытка №" + (i + 1));
 
                 //Ждём, пока завершится анализ
-                Thread.sleep(WAIT_TIME);
+                Thread.currentThread().sleep(WAIT_TIME);
 
                 HttpResponse<String> analysisResponse = client.send(analysisRequest, HttpResponse.BodyHandlers.ofString());
                 analysisResult = new JSONObject(analysisResponse.body());

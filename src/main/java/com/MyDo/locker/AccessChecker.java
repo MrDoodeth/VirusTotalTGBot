@@ -20,11 +20,17 @@ public class AccessChecker {
     private static final ArrayList<Config.Chat> chatList = new ObjectMapper().convertValue(Config.getINSTANCE().getChats(), new TypeReference<>() {
     });
 
-    public static UserStatus check(Update update) {
+    public static UserStatus checkStatus(Update update) {
 
         UserStatus userStatus = UserStatus.ACCESS;
         final long userId = update.hasCallbackQuery() ? update.getCallbackQuery().getFrom().getId() : update.getMessage().getFrom().getId();
         UserData.addUserID(userId);
+
+        Set<Long> adminListUsers = new ObjectMapper().convertValue(Config.getINSTANCE().getAdminIds(), new TypeReference<>() {});
+        if (adminListUsers.contains(userId)) {
+            userStatus = UserStatus.ADMINISTRATOR;
+            return userStatus;
+        }
 
         Set<Long> blackListUsers = new ObjectMapper().convertValue(Config.getINSTANCE().getBlackList(), new TypeReference<>() {});
         if (blackListUsers.contains(userId)) {
