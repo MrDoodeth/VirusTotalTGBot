@@ -4,9 +4,12 @@ import com.MyDo.bot.Bot;
 import com.MyDo.config.Config;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.telegram.telegrambots.meta.api.methods.groupadministration.GetChatMember;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.api.objects.User;
 import org.telegram.telegrambots.meta.api.objects.chatmember.ChatMember;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
@@ -17,13 +20,18 @@ import java.util.List;
 import java.util.Set;
 
 public class AccessChecker {
+    private static final Logger log = LoggerFactory.getLogger(AccessChecker.class);
+
     private static final ArrayList<Config.Chat> chatList = new ObjectMapper().convertValue(Config.getINSTANCE().getChats(), new TypeReference<>() {
     });
 
     public static UserStatus checkStatus(Update update) {
 
         UserStatus userStatus = UserStatus.ACCESS;
-        final long userId = update.hasCallbackQuery() ? update.getCallbackQuery().getFrom().getId() : update.getMessage().getFrom().getId();
+
+        final User userFrom = update.hasCallbackQuery() ? update.getCallbackQuery().getFrom() : update.getMessage().getFrom();
+        final long userId = userFrom.getId();
+
         UserData.addUserID(userId);
 
         Set<Long> adminListUsers = new ObjectMapper().convertValue(Config.getINSTANCE().getAdminIds(), new TypeReference<>() {});
@@ -44,13 +52,13 @@ public class AccessChecker {
             try {
                 ChatMember chatMember = Bot.getINSTANCE().execute(getChatMember);
                 String status = chatMember.getStatus();
-                System.out.println(status);
+                log.debug("UserName: {}, Status: {}", userFrom.getUserName(), status);
                 if (status.equals("left") || status.equals("kicked")) {
                     userStatus = UserStatus.FORBIDDEN;
                     break;
                 }
             } catch (TelegramApiException e) {
-                System.out.println(e.getMessage());
+                log.error("Checking error: {}", e.getMessage());
             }
         }
 

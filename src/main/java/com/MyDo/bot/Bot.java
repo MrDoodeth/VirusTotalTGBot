@@ -7,6 +7,8 @@ import com.MyDo.messageHandler.CommandHandler;
 import com.MyDo.messageHandler.MessageHandler;
 import com.MyDo.messageHandler.ReplyHandler;
 import com.MyDo.messageHandler.ServiceHandler;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendDocument;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -19,6 +21,8 @@ import java.nio.file.Path;
 
 
 public class Bot extends TelegramLongPollingBot {
+    private static final Logger log = LoggerFactory.getLogger(Bot.class);
+
     private static Bot INSTANCE;
 
     private final String apiBotToken;
@@ -105,7 +109,7 @@ public class Bot extends TelegramLongPollingBot {
         try {
             return execute(sendMessage);
         } catch (TelegramApiException e) {
-            System.out.println(e.getMessage());
+            log.error("Sending message error: {}", e.getMessage());
         }
         return null;
     }
@@ -122,7 +126,7 @@ public class Bot extends TelegramLongPollingBot {
         try {
             return execute(sendMessage);
         } catch (TelegramApiException e) {
-            System.out.println(e.getMessage());
+            log.error("Sending message error: {}", e.getMessage());
         }
         return null;
     }
@@ -134,7 +138,7 @@ public class Bot extends TelegramLongPollingBot {
         try {
             execute(sendDocument);
         } catch (TelegramApiException e) {
-            System.out.println(e.getMessage());
+            log.error("Sending document error: {}", e.getMessage());
         }
     }
 }

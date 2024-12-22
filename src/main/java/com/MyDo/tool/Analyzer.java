@@ -3,6 +3,8 @@ package com.MyDo.tool;
 import com.MyDo.bot.Bot;
 import com.MyDo.uploader.Uploader;
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.io.IOException;
@@ -12,6 +14,7 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
 public class Analyzer {
+    private static final Logger log = LoggerFactory.getLogger(Analyzer.class);
 
     private static final int COUNT_OF_REPEAT = 20; // Проверка MAX = 5 min
     private static final int WAIT_TIME = 15_000; //Ограничение API = 4 lookups / min
@@ -20,6 +23,7 @@ public class Analyzer {
         final HttpClient client = HttpClient.newHttpClient();
         JSONObject analysisResult = null;
 
+        String selfLink = "";
         try {
             JSONObject uploadResult = uploader.uploadOnVirusTotal();
 
@@ -33,16 +37,16 @@ public class Analyzer {
                     .build();
 
             for (int i = 0; i < COUNT_OF_REPEAT; i++) {
-                System.out.println("Попытка №" + (i + 1));
 
                 //Ждём, пока завершится анализ
-                Thread.currentThread().sleep(WAIT_TIME);
+                Thread.sleep(WAIT_TIME);
 
                 HttpResponse<String> analysisResponse = client.send(analysisRequest, HttpResponse.BodyHandlers.ofString());
                 analysisResult = new JSONObject(analysisResponse.body());
 
                 String status = analysisResult.getJSONObject("data").getJSONObject("attributes").getString("status");
-                System.out.println(status);
+                selfLink = analysisResult.getJSONObject("data").getJSONObject("links").getString("self");
+                log.info("User status: {}", status);
 
                 if (status.equals("completed")) {
                     break;
@@ -52,10 +56,9 @@ public class Analyzer {
             }
 
         } catch (IOException | InterruptedException | TelegramApiException e) {
-            System.out.println(e.getMessage());
+            log.error(e.getMessage());
         }
-        System.out.println("Отсылаю ответ");
-        System.out.println(analysisResult);
+        log.info("Sending report... ({})", selfLink);
         return analysisResult;
     }
 }

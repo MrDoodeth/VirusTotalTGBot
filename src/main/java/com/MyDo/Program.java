@@ -1,11 +1,17 @@
+package com.MyDo;
+
 import com.MyDo.bot.Bot;
 import com.MyDo.config.Config;
 import com.MyDo.locker.UserData;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 
 public class Program {
+    private static final Logger log = LoggerFactory.getLogger(Program.class);
+
     private static final String API_TOKEN = "7513757273:AAGp28NpxTj2Fp_Jm6mAFwDOMFemqb_kJN8";
     private static final String BOT_USERNAME = "super_virus_total_bot";
 
@@ -19,6 +25,6 @@ public class Program {
         Config.init();
         UserData.Init();
 
-        System.out.println("Bot started");
+        log.info("Bot started");
     }
 }

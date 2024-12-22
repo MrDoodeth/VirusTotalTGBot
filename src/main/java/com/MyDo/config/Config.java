@@ -2,20 +2,25 @@ package com.MyDo.config;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
 
 public class Config {
-    private static final Path path = Path.of("src", "main", "resources", "config.json");
+    private static final Logger log = LoggerFactory.getLogger(Config.class);
+
+    private static final Path path = Path.of("config.json");
 
     public static void init() {
         ObjectMapper mapper = new ObjectMapper();
         try {
             Config config = mapper.readValue(path.toFile(), Config.class);
             Config.setINSTANCE(config);
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
+        } catch (IOException e) {
+            log.error("Initialize config error ({}): {}", path, e.getMessage());
         }
     }
 

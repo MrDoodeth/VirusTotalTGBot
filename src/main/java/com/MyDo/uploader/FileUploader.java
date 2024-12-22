@@ -2,6 +2,8 @@ package com.MyDo.uploader;
 
 import com.MyDo.bot.Bot;
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.telegram.telegrambots.meta.api.methods.GetFile;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
@@ -17,6 +19,8 @@ import java.util.UUID;
 import static com.MyDo.tool.HttpBodyBuilder.createMultipart;
 
 public class FileUploader implements Uploader {
+    private static final Logger log = LoggerFactory.getLogger(FileUploader.class);
+
     private final String fileName;
     private final String fileId;
 
@@ -41,9 +45,9 @@ public class FileUploader implements Uploader {
                 .POST(createMultipart(boundary, fileInputStream, fileName))
                 .build();
 
-        System.out.println("Загружаю файл на VirusTotal");
+        log.info("Uploading file to VirusTotal");
         HttpResponse<String> uploadFileResponse = client.send(requestToPostFile, HttpResponse.BodyHandlers.ofString());
-        System.out.println("Загрузил");
+        log.info("Uploading completed");
         return new JSONObject(uploadFileResponse.body());
     }
 

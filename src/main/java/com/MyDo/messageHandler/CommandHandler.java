@@ -33,7 +33,6 @@ public class CommandHandler implements MessageHandler {
             SendMessage sendMessage = new SendMessage();
 
             InlineKeyboardButton usersIdButton;
-            InlineKeyboardButton mailingButton;
 
             usersIdButton = InlineKeyboardButton.builder()
                     .text(Config.getINSTANCE().getCommands().getUsersId())
