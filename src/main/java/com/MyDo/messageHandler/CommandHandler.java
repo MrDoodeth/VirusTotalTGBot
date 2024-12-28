@@ -23,7 +23,7 @@ public class CommandHandler implements MessageHandler {
         } else if (text.equalsIgnoreCase("/help")) {
             Bot.getINSTANCE().sendMessage(chatId, Config.getINSTANCE().getCommands().getHelp());
         } else if (text.equalsIgnoreCase("/admin")) {
-            UserStatus userStatus = AccessChecker.checkStatus(update);
+            UserStatus userStatus = AccessChecker.getUserStatus(update);
 
             if (userStatus != UserStatus.ADMINISTRATOR) {
                 Bot.getINSTANCE().sendMessage(chatId, Config.getINSTANCE().getCommands().getNotAdmin());

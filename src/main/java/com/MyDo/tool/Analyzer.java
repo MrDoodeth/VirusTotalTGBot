@@ -39,6 +39,7 @@ public class Analyzer {
             for (int i = 0; i < COUNT_OF_REPEAT; i++) {
 
                 //Ждём, пока завершится анализ
+                log.debug("Try №{}", i+1);
                 Thread.sleep(WAIT_TIME);
 
                 HttpResponse<String> analysisResponse = client.send(analysisRequest, HttpResponse.BodyHandlers.ofString());
@@ -46,7 +47,7 @@ public class Analyzer {
 
                 String status = analysisResult.getJSONObject("data").getJSONObject("attributes").getString("status");
                 selfLink = analysisResult.getJSONObject("data").getJSONObject("links").getString("self");
-                log.info("User status: {}", status);
+                log.info("Analyze status: {}", status);
 
                 if (status.equals("completed")) {
                     break;
@@ -58,7 +59,7 @@ public class Analyzer {
         } catch (IOException | InterruptedException | TelegramApiException e) {
             log.error(e.getMessage());
         }
-        log.info("Sending report... ({})", selfLink);
+        log.info("Sent report ({})", selfLink);
         return analysisResult;
     }
 }

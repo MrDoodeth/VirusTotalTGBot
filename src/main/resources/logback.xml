@@ -1,26 +1,29 @@
 <configuration>
-    <root level="info">
-        <appender-ref ref="CONSOLE" />
-        <appender-ref ref="FILE" />
-    </root>
-
-    <logger name="org.telegram" level="debug">
-        <appender-ref ref="FILE" />
-    </logger>
+    <property name="TIME-PATTERN" value="%d{dd-MM-yyyy HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n" />
+    <property name="LOG-DIR" value="logs/app.log" />
 
     <!-- Вывод в консоль -->
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
-            <pattern>%d{dd-MM-yyyy HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n</pattern>
+            <pattern>${TIME-PATTERN}</pattern>
         </encoder>
     </appender>
 
     <!-- Вывод в файл -->
     <appender name="FILE" class="ch.qos.logback.core.FileAppender">
-        <file>logs/app.log</file>
+        <file>${LOG-DIR}</file>
         <append>true</append>
         <encoder>
-            <pattern>%d{dd-MM-yyyy HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n</pattern>
+            <pattern>${TIME-PATTERN}</pattern>
         </encoder>
     </appender>
+
+    <logger name="org.telegram" level="debug">
+        <appender-ref ref="FILE"/>
+    </logger>
+
+    <root level="debug">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="FILE"/>
+    </root>
 </configuration>

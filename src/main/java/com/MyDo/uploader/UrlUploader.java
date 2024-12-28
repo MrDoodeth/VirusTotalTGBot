@@ -33,8 +33,6 @@ public class UrlUploader implements Uploader {
                 .POST(createWWW(suspiciousUrl))
                 .build();
 
-        System.out.println(requestToPostUrl.toString());
-
         log.info("Uploading link to VirusTotal");
         HttpResponse<String> uploadUrlResponse = client.send(requestToPostUrl, HttpResponse.BodyHandlers.ofString());
         log.info("Uploading completed");

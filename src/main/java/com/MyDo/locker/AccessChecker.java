@@ -15,9 +15,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMa
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class AccessChecker {
     private static final Logger log = LoggerFactory.getLogger(AccessChecker.class);
@@ -25,25 +23,46 @@ public class AccessChecker {
     private static final ArrayList<Config.Chat> chatList = new ObjectMapper().convertValue(Config.getINSTANCE().getChats(), new TypeReference<>() {
     });
 
-    public static UserStatus checkStatus(Update update) {
+    private static final Map<Long, UserStatus> usersStatus = new HashMap<>();
 
-        UserStatus userStatus = UserStatus.ACCESS;
+    public static UserStatus getUserStatus(Update update) {
+        final User userFrom = update.hasCallbackQuery() ? update.getCallbackQuery().getFrom() : update.getMessage().getFrom();
+        final long userId = userFrom.getId();
+        return usersStatus.get(userId);
+    }
 
+    private static boolean updateUserStatus(long userId, UserStatus userStatus) {
+        if (usersStatus.containsKey(userId)) {
+            usersStatus.replace(userId, userStatus);
+            return true;
+        }
+        else {
+            usersStatus.put(userId, userStatus);
+            return false;
+        }
+    }
+
+    public static void checkStatus(Update update) {
         final User userFrom = update.hasCallbackQuery() ? update.getCallbackQuery().getFrom() : update.getMessage().getFrom();
         final long userId = userFrom.getId();
 
+        UserStatus userStatus = UserStatus.ACCESS;
         UserData.addUserID(userId);
 
         Set<Long> adminListUsers = new ObjectMapper().convertValue(Config.getINSTANCE().getAdminIds(), new TypeReference<>() {});
         if (adminListUsers.contains(userId)) {
             userStatus = UserStatus.ADMINISTRATOR;
-            return userStatus;
+            if (updateUserStatus(userId, userStatus)) {
+                return;
+            }
         }
 
         Set<Long> blackListUsers = new ObjectMapper().convertValue(Config.getINSTANCE().getBlackList(), new TypeReference<>() {});
         if (blackListUsers.contains(userId)) {
             userStatus = UserStatus.BLOCKED;
-            return userStatus;
+            if (updateUserStatus(userId, userStatus)) {
+                return;
+            }
         }
 
         //Проверка на присутствие в каналах
@@ -52,7 +71,7 @@ public class AccessChecker {
             try {
                 ChatMember chatMember = Bot.getINSTANCE().execute(getChatMember);
                 String status = chatMember.getStatus();
-                log.debug("UserName: {}, Status: {}", userFrom.getUserName(), status);
+                log.debug("UserID: {}, Status: {}, ChatID: {}", userFrom.getId(), status, chat.getId());
                 if (status.equals("left") || status.equals("kicked")) {
                     userStatus = UserStatus.FORBIDDEN;
                     break;
@@ -62,7 +81,7 @@ public class AccessChecker {
             }
         }
 
-        return userStatus;
+        updateUserStatus(userId, userStatus);
     }
 
     public static void sendRequirementsMessage(long userChatId) {

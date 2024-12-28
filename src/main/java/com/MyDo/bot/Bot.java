@@ -13,7 +13,6 @@ import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendDocument;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.InputFile;
-import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
@@ -35,7 +34,7 @@ public class Bot extends TelegramLongPollingBot {
         this.virusTotalApiToken = virusTotalApiToken;
     }
 
-    public static Bot getINSTANCE() {
+    public static synchronized Bot getINSTANCE() {
         return INSTANCE;
     }
 
@@ -69,7 +68,8 @@ public class Bot extends TelegramLongPollingBot {
 
         if (update.hasMessage()) {
             //Проверка на доступ к боту
-            UserStatus userStatus = AccessChecker.checkStatus(update);
+           AccessChecker.checkStatus(update);
+           UserStatus userStatus = AccessChecker.getUserStatus(update);
 
             String text = update.getMessage().getText();
             final long userChatId = update.getMessage().getChatId();
@@ -96,25 +96,11 @@ public class Bot extends TelegramLongPollingBot {
         }
     }
 
-    public Message sendMessage(long chatId, String textMessage) {
-        SendMessage sendMessage = new SendMessage();
-        sendMessage.setChatId(Long.toString(chatId));
-        sendMessage.enableMarkdown(true);
-
-        //Ограничение TG на максимальную длинну
-        final int MAX_LENGTH = 4096;
-        textMessage = textMessage.length() > MAX_LENGTH ? textMessage.substring(0, MAX_LENGTH) : textMessage;
-        sendMessage.setText(textMessage);
-
-        try {
-            return execute(sendMessage);
-        } catch (TelegramApiException e) {
-            log.error("Sending message error: {}", e.getMessage());
-        }
-        return null;
+    public void sendMessage(long chatId, String textMessage) {
+        sendMessage(chatId, textMessage, new SendMessage());
     }
 
-    public Message sendMessage(long chatId, String textMessage, SendMessage sendMessage) {
+    public void sendMessage(long chatId, String textMessage, SendMessage sendMessage) {
         sendMessage.setChatId(Long.toString(chatId));
         sendMessage.enableMarkdown(true);
 
@@ -124,11 +110,10 @@ public class Bot extends TelegramLongPollingBot {
         sendMessage.setText(textMessage);
 
         try {
-            return execute(sendMessage);
+            execute(sendMessage);
         } catch (TelegramApiException e) {
             log.error("Sending message error: {}", e.getMessage());
         }
-        return null;
     }
 
     public void sendDocument(long chatId, Path filePath) {
