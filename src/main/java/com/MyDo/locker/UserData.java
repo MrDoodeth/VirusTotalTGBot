@@ -19,7 +19,7 @@ public class UserData {
 
     private static final Set<Long> usersIdSet = new HashSet<>();
 
-    public static void Init() {
+    public static void init() {
         try (BufferedReader reader = new BufferedReader(new FileReader(path.toFile()))) {
             String line;
             while ((line = reader.readLine()) != null) {

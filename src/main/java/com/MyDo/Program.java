@@ -22,7 +22,7 @@ public class Program {
         botsApi.registerBot(Bot.getINSTANCE());
 
         Config.init();
-        UserData.Init();
+        UserData.init();
 
         log.info("Bot started");
     }
