@@ -12,14 +12,13 @@ import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 public class Program {
     private static final Logger log = LoggerFactory.getLogger(Program.class);
 
-    private static final String API_TOKEN = "7513757273:AAGp28NpxTj2Fp_Jm6mAFwDOMFemqb_kJN8";
-    private static final String BOT_USERNAME = "super_virus_total_bot";
-
-    private static final String VIRUS_TOTAL_API_TOKEN = "12abc3bc8bcaf59eca1e796cff3464d5e19ba4dc1d7e4bd970bfb942ebc5ca68";
-
     public static void main(String[] args) throws TelegramApiException {
+        final String TG_API_TOKEN = System.getenv("TG_BOT_API");
+        final String TG_BOT_USERNAME = System.getenv("TG_BOT_NAME");
+        final String VIRUS_TOTAL_API_TOKEN = System.getenv("VT_API");
+
         TelegramBotsApi botsApi = new TelegramBotsApi(DefaultBotSession.class);
-        Bot.setINSTANCE(new Bot(API_TOKEN, BOT_USERNAME, VIRUS_TOTAL_API_TOKEN));
+        Bot.setINSTANCE(new Bot(TG_API_TOKEN, TG_BOT_USERNAME, VIRUS_TOTAL_API_TOKEN));
         botsApi.registerBot(Bot.getINSTANCE());
 
         Config.init();
