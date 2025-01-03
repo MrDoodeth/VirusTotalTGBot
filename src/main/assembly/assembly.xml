@@ -2,9 +2,10 @@
           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:schemaLocation="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.3 https://maven.apache.org/xsd/assembly-1.1.3.xsd">
 
-    <id>VirusTotalBot</id>
+    <id>VirusTotalTGBot</id>
     <formats>
         <format>zip</format>
+        <format>tar.gz</format>
     </formats>
     <includeBaseDirectory>false</includeBaseDirectory>
     <fileSets>
@@ -27,21 +28,12 @@
             </includes>
         </fileSet>
 
-        <!-- Файл config.json -->
+        <!-- Файлы из resources -->
         <fileSet>
             <directory>src/main/resources</directory>
             <outputDirectory>/</outputDirectory>
             <includes>
-                <include>config.json</include>
-            </includes>
-        </fileSet>
-
-        <!-- Файл users-id.txt -->
-        <fileSet>
-            <directory>src/main/resources</directory>
-            <outputDirectory>/</outputDirectory>
-            <includes>
-                <include>users-id.txt</include>
+                <include>*</include>
             </includes>
         </fileSet>
     </fileSets>

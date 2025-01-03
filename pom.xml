@@ -18,6 +18,19 @@
     </properties>
 
     <build>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+            </resource>
+            <resource>
+                <directory>${project.basedir}</directory>
+                <includes>
+                    <include>LICENSE</include>
+                    <include>NOTICE</include>
+                </includes>
+            </resource>
+        </resources>
+
         <finalName>${packageName}</finalName>
         <plugins>
 
@@ -82,7 +95,7 @@
                         </goals>
                         <configuration>
                             <descriptors>
-                                <descriptor>src/main/assembly/zip.xml</descriptor>
+                                <descriptor>src/main/assembly/assembly.xml</descriptor>
                             </descriptors>
                         </configuration>
                     </execution>

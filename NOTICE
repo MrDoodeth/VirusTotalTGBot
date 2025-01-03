@@ -1,0 +1,13 @@
+VirusTotalTGBot
+Copyright 2025 MrDoodeth
+
+This product includes software developed by the following:
+
+- Telegram Bots API, licensed under the MIT License
+  (https://github.com/rubenlagus/TelegramBots)
+- Jackson JSON, licensed under the Apache License, Version 2.0
+  (https://github.com/FasterXML/jackson)
+- SLF4J, licensed under the MIT License
+  (https://github.com/qos-ch/slf4j)
+- Logback, licensed under the Eclipse Public License 1.0 and GNU Lesser General Public License 2.1
+  (https://github.com/qos-ch/logback)
