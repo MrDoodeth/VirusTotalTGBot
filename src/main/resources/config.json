@@ -1,32 +1,32 @@
 {
   "messages": {
-    "waiting": "Обрабатываю...",
-    "misunderstanding": "Это не файл. Пришлите мне файл, а я его проверю!",
-    "too-large-file": "К сожалению, я не могу обрабатывать файлы больше 20 МБ :(",
-    "error": "Что-то пошло не так. :(",
-    "condition": "Для работы бота нужно подписаться на каналы!\uD83E\uDD16",
-    "chanel" : "КАНАЛ",
-    "check": "ПРОВЕРИТЬ",
-    "meet-condition": "Отлично! Теперь можете пользоваться ботом!",
-    "not-meet-condition": "Ещё не всё.",
-    "black-list": "У вас нет доступа к боту! \uD83D\uDE2D"
+    "waiting": "Processing...",
+    "misunderstanding": "This is not a file. Please send me a file, and I will check it!",
+    "too-large-file": "Unfortunately, I cannot process files larger than 20 MB :(",
+    "error": "Something went wrong. :(",
+    "condition": "You need to subscribe to the channels to use the bot! \uD83E\uDD16",
+    "chanel": "CHANNEL",
+    "black-list": "You do not have access to the bot! \uD83D\uDE2D"
   },
   "commands": {
-    "start": "Привет, присылайте подозрительный файл сюда, а я его проверю!",
-    "misunderstanding": "Извините, я не понимаю эту команду. Попробуйте /help для списка команд.",
-    "help": "Список доступных команд:\n/start - начать\n/help - помощь",
-    "admin": "Вот доступ к админ-панели! \uD83D\uDD79",
-    "not-admin": "Вы не администратор.",
-    "users-id": "\uD83D\uDCDD Получить список пользователей"
+    "start": "Hello, send a suspicious file or link here, and I will check it!",
+    "misunderstanding": "Sorry, I do not understand this command. Try /help for a list of commands.",
+    "help": "List of available commands:\n/start - start\n/help - help",
+    "admin": "Here is access to the admin panel! \uD83D\uDD79",
+    "not-admin": "You are not an administrator.",
+    "users-id": "Get the list of users \uD83D\uDCDD",
+    "subscription-check-toggle": "Channel subscription check: ",
+    "subscription-check-on": "\uD83D\uDFE2",
+    "subscription-check-off": "\uD83D\uDD34"
   },
   "report": {
-    "malicious": "⛔ Злонамеренный: ",
-    "type-unsupported": "❔ Тип не поддерживается: ",
-    "failure": "⚠\uFE0F Ошибка: ",
-    "undetected": "✅ Необнаруженный: ",
-    "suspicious": "❓ Подозрительный: ",
-    "harmless": "❎ Безвредный: ",
-    "timeout": "⌛ Тайм-аут: "
+    "malicious": "⛔ Malicious: ",
+    "type-unsupported": "❔ Unsupported type: ",
+    "failure": "⚠\uFE0F Failure: ",
+    "undetected": "✅ Undetected: ",
+    "suspicious": "❓ Suspicious: ",
+    "harmless": "❎ Harmless: ",
+    "timeout": "⌛ Timeout: "
   },
   "chats": [
     {
