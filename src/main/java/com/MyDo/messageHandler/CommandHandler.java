@@ -4,12 +4,9 @@ import com.MyDo.bot.Bot;
 import com.MyDo.config.Config;
 import com.MyDo.locker.AccessChecker;
 import com.MyDo.locker.UserStatus;
+import com.MyDo.tool.InlineKeyboardMarkupBuilder;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
-
-import java.util.List;
 
 /*
  * Copyright 2025 MrDoodeth
@@ -32,38 +29,25 @@ public class CommandHandler implements MessageHandler {
     @Override
     public void getResponse(Update update) {
         String text = update.getMessage().getText();
-        long chatId = update.getMessage().getChatId();
 
         if (text.equalsIgnoreCase("/start")) {
-            Bot.getINSTANCE().sendMessage(chatId, Config.getINSTANCE().getCommands().getStart());
+            Bot.getINSTANCE().sendMessage(update, Config.getINSTANCE().getCommands().getStart());
         } else if (text.equalsIgnoreCase("/help")) {
-            Bot.getINSTANCE().sendMessage(chatId, Config.getINSTANCE().getCommands().getHelp());
+            Bot.getINSTANCE().sendMessage(update, Config.getINSTANCE().getCommands().getHelp());
         } else if (text.equalsIgnoreCase("/admin")) {
             UserStatus userStatus = AccessChecker.getUserStatus(update);
 
             if (userStatus != UserStatus.ADMINISTRATOR) {
-                Bot.getINSTANCE().sendMessage(chatId, Config.getINSTANCE().getCommands().getNotAdmin());
+                Bot.getINSTANCE().sendMessage(update, Config.getINSTANCE().getCommands().getNotAdmin());
                 return;
             }
 
             SendMessage sendMessage = new SendMessage();
+            sendMessage.setReplyMarkup(InlineKeyboardMarkupBuilder.buildAdminPanel());
 
-            InlineKeyboardButton usersIdButton;
-
-            usersIdButton = InlineKeyboardButton.builder()
-                    .text(Config.getINSTANCE().getCommands().getUsersId())
-                    .callbackData("get-users-id")
-                    .build();
-
-            InlineKeyboardMarkup keyboard = InlineKeyboardMarkup.builder()
-                    .keyboardRow(List.of(usersIdButton))
-                    .build();
-
-            sendMessage.setReplyMarkup(keyboard);
-
-            Bot.getINSTANCE().sendMessage(chatId, Config.getINSTANCE().getCommands().getAdmin(), sendMessage);
+            Bot.getINSTANCE().sendMessage(update, Config.getINSTANCE().getCommands().getAdmin(), sendMessage);
         } else {
-            Bot.getINSTANCE().sendMessage(chatId, Config.getINSTANCE().getCommands().getMisunderstanding());
+            Bot.getINSTANCE().sendMessage(update, Config.getINSTANCE().getCommands().getMisunderstanding());
         }
     }
 }

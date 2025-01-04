@@ -35,7 +35,6 @@ public class ServiceHandler implements MessageHandler {
 
     @Override
     public void getResponse(Update update) {
-        final long chatId = update.getMessage().getChatId();
         final String text = update.getMessage().getText();
         final String entityName;
         final Uploader uploader;
@@ -49,17 +48,17 @@ public class ServiceHandler implements MessageHandler {
             entityName = fileName;
 
             if (document.getFileSize() <= MAX_FILE_SIZE) {
-                Bot.getINSTANCE().sendMessage(chatId, Config.getINSTANCE().getMessages().getWaiting());
+                Bot.getINSTANCE().sendMessage(update, Config.getINSTANCE().getMessages().getWaiting());
             } else {
-                Bot.getINSTANCE().sendMessage(chatId, Config.getINSTANCE().getMessages().getTooLargeFile());
+                Bot.getINSTANCE().sendMessage(update, Config.getINSTANCE().getMessages().getTooLargeFile());
                 return;
             }
         } else if (UrlValidator.isValidUrl(text)) {
             uploader = new UrlUploader(text);
             entityName = text;
-            Bot.getINSTANCE().sendMessage(chatId, Config.getINSTANCE().getMessages().getWaiting());
+            Bot.getINSTANCE().sendMessage(update, Config.getINSTANCE().getMessages().getWaiting());
         } else {
-            Bot.getINSTANCE().sendMessage(chatId, Config.getINSTANCE().getMessages().getMisunderstanding());
+            Bot.getINSTANCE().sendMessage(update, Config.getINSTANCE().getMessages().getMisunderstanding());
             return;
         }
 
@@ -73,6 +72,6 @@ public class ServiceHandler implements MessageHandler {
 
         SendMessage sendMessage = new SendMessage();
         sendMessage.disableWebPagePreview();
-        Bot.getINSTANCE().sendMessage(chatId, report, sendMessage);
+        Bot.getINSTANCE().sendMessage(update, report, sendMessage);
     }
 }

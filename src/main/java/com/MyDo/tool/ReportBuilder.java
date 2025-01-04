@@ -39,9 +39,10 @@ public class ReportBuilder {
         ObjectMapper mapper = new ObjectMapper();
         Map<String, String> reportMap = mapper.convertValue(Config.getINSTANCE().getReport(), Map.class);
 
-        //Выводит справку
+        //Reference
         for (String key : stats.keySet()) {
-            //Исключения
+
+            //Except
             if (key.equals("confirmed-timeout")) {
                 continue;
             }
@@ -54,13 +55,13 @@ public class ReportBuilder {
                     .append("\r\n");
         }
 
-        //Перегородка
+        //Border
         report
                 .append("=".repeat(COUNT))
                 .append("\r\n");
 
 
-        //Выводит результат
+        //Result
         for (String key : results.keySet()) {
             report
                     .append(reportMap.get(results.getJSONObject(key).getString("category")).charAt(0))

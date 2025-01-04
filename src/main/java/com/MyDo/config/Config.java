@@ -114,15 +114,6 @@ public class Config {
         @JsonProperty("chanel")
         private String chanel;
 
-        @JsonProperty("check")
-        private String check;
-
-        @JsonProperty("meet-condition")
-        private String meetCondition;
-
-        @JsonProperty("not-meet-condition")
-        private String notMeetCondition;
-
         @JsonProperty("black-list")
         private String blackList;
 
@@ -146,20 +137,8 @@ public class Config {
             return condition;
         }
 
-        public String getCheck() {
-            return check;
-        }
-
         public String getChanel() {
             return chanel;
-        }
-
-        public String getMeetCondition() {
-            return meetCondition;
-        }
-
-        public String getNotMeetCondition() {
-            return notMeetCondition;
         }
 
         public String getBlackList() {
@@ -186,6 +165,15 @@ public class Config {
         @JsonProperty("users-id")
         private String usersId;
 
+        @JsonProperty("subscription-check-toggle")
+        private String subscriptionToggle;
+
+        @JsonProperty("subscription-check-on")
+        private String subscriptionOn;
+
+        @JsonProperty("subscription-check-off")
+        private String subscriptionOff;
+
         public String getStart() {
             return start;
         }
@@ -208,6 +196,18 @@ public class Config {
 
         public String getUsersId() {
             return usersId;
+        }
+
+        public String getSubscriptionToggle() {
+            return subscriptionToggle;
+        }
+
+        public String getSubscriptionOn() {
+            return subscriptionOn;
+        }
+
+        public String getSubscriptionOff() {
+            return subscriptionOff;
         }
     }
 

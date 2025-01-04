@@ -2,6 +2,7 @@ package com.MyDo.locker;
 
 import com.MyDo.bot.Bot;
 import com.MyDo.config.Config;
+import com.MyDo.tool.InlineKeyboardMarkupBuilder;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
@@ -11,11 +12,12 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.User;
 import org.telegram.telegrambots.meta.api.objects.chatmember.ChatMember;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 /*
  * Copyright 2025 MrDoodeth
@@ -41,6 +43,17 @@ public class AccessChecker {
 
     private static final Map<Long, UserStatus> usersStatus = new HashMap<>();
 
+    private static boolean subscriptionToggle = true;
+
+    public static synchronized boolean isSubscriptionToggle() {
+        return subscriptionToggle;
+    }
+
+    public static synchronized void switchSubscriptionToggle() {
+        subscriptionToggle = !subscriptionToggle;
+        log.info("Subscription checking: {}", subscriptionToggle);
+    }
+
     public static UserStatus getUserStatus(Update update) {
         final User userFrom = update.hasCallbackQuery() ? update.getCallbackQuery().getFrom() : update.getMessage().getFrom();
         final long userId = userFrom.getId();
@@ -51,8 +64,7 @@ public class AccessChecker {
         if (usersStatus.containsKey(userId)) {
             usersStatus.replace(userId, userStatus);
             return true;
-        }
-        else {
+        } else {
             usersStatus.put(userId, userStatus);
             return false;
         }
@@ -65,7 +77,8 @@ public class AccessChecker {
         UserStatus userStatus = UserStatus.ACCESS;
         UserData.addUserID(userId);
 
-        Set<Long> adminListUsers = new ObjectMapper().convertValue(Config.getINSTANCE().getAdminIds(), new TypeReference<>() {});
+        Set<Long> adminListUsers = new ObjectMapper().convertValue(Config.getINSTANCE().getAdminIds(), new TypeReference<>() {
+        });
         if (adminListUsers.contains(userId)) {
             userStatus = UserStatus.ADMINISTRATOR;
             if (updateUserStatus(userId, userStatus)) {
@@ -73,7 +86,8 @@ public class AccessChecker {
             }
         }
 
-        Set<Long> blackListUsers = new ObjectMapper().convertValue(Config.getINSTANCE().getBlackList(), new TypeReference<>() {});
+        Set<Long> blackListUsers = new ObjectMapper().convertValue(Config.getINSTANCE().getBlackList(), new TypeReference<>() {
+        });
         if (blackListUsers.contains(userId)) {
             userStatus = UserStatus.BLOCKED;
             if (updateUserStatus(userId, userStatus)) {
@@ -81,7 +95,11 @@ public class AccessChecker {
             }
         }
 
-        //Проверка на присутствие в каналах
+        if (!subscriptionToggle) {
+            updateUserStatus(userId, userStatus);
+            return;
+        }
+
         for (Config.Chat chat : chatList) {
             GetChatMember getChatMember = new GetChatMember(Long.toString(chat.getId()), userId);
             try {
@@ -100,32 +118,10 @@ public class AccessChecker {
         updateUserStatus(userId, userStatus);
     }
 
-    public static void sendRequirementsMessage(long userChatId) {
+    public static void sendRequirementsMessage(Update update) {
         SendMessage sendMessage = new SendMessage();
-        InlineKeyboardButton[] linkButtons = new InlineKeyboardButton[4];
-        InlineKeyboardButton checkButton;
+        sendMessage.setReplyMarkup(InlineKeyboardMarkupBuilder.buildAccessRequirements());
 
-        for (int i = 0; i < linkButtons.length; i++) {
-            linkButtons[i] = InlineKeyboardButton.builder()
-                    .url(chatList.get(i).getUrl())
-                    .text(Config.getINSTANCE().getMessages().getChanel() + ' ' +  "№" + (i + 1))
-                    .callbackData("button" + (i + 1))
-                    .build();
-        }
-
-        checkButton = InlineKeyboardButton.builder()
-                .text(Config.getINSTANCE().getMessages().getCheck())
-                .callbackData("check")
-                .build();
-
-        InlineKeyboardMarkup keyboard = InlineKeyboardMarkup.builder()
-                .keyboardRow(List.of(linkButtons[0], linkButtons[1]))
-                .keyboardRow(List.of(linkButtons[2], linkButtons[3]))
-                .keyboardRow(List.of(checkButton))
-                .build();
-
-        sendMessage.setReplyMarkup(keyboard);
-
-        Bot.getINSTANCE().sendMessage(userChatId, Config.getINSTANCE().getMessages().getCondition(), sendMessage);
+        Bot.getINSTANCE().sendMessage(update, Config.getINSTANCE().getMessages().getCondition(), sendMessage);
     }
 }
