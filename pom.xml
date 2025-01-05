@@ -5,13 +5,12 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.github.mrdoodeth</groupId>
-    <artifactId>virus-total-tg-bot</artifactId>
+    <artifactId>VirusTotalTGBot</artifactId>
     <version>1.0.0</version>
     <packaging>jar</packaging>
     <name>VirusTotalTGBot</name>
 
     <properties>
-        <packageName>VTTGB</packageName>
         <telegram.version>6.0.1</telegram.version>
         <java.version>11</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -31,7 +30,6 @@
             </resource>
         </resources>
 
-        <finalName>${packageName}</finalName>
         <plugins>
 
             <!-- Контроль версии Java -->
