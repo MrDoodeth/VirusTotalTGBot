@@ -2,6 +2,7 @@ package com.MyDo.bot;
 
 import com.MyDo.config.Config;
 import com.MyDo.locker.AccessChecker;
+import com.MyDo.locker.UserData;
 import com.MyDo.locker.UserStatus;
 import com.MyDo.messageHandler.CommandHandler;
 import com.MyDo.messageHandler.MessageHandler;
@@ -49,7 +50,7 @@ public class Bot extends TelegramLongPollingBot {
     private final String botUsername;
     private final String virusTotalApiToken;
 
-    private static Map<Long, Message> lastBotMessages = new HashMap<>();
+    private static final Map<Long, Message> lastBotMessages = new HashMap<>();
 
     public Bot(String apiBotToken, String botUsername, String virusTotalApiToken) {
         this.apiBotToken = apiBotToken;
@@ -178,6 +179,7 @@ public class Bot extends TelegramLongPollingBot {
         sendDocument.setDocument(new InputFile(filePath.toFile()));
         try {
             execute(sendDocument);
+            log.info("Sent {}", filePath);
         } catch (TelegramApiException e) {
             log.error("Sending document error: {}", e.getMessage());
         }

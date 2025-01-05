@@ -39,7 +39,6 @@ public class Analyzer {
         final HttpClient client = HttpClient.newHttpClient();
         JSONObject analysisResult = null;
 
-        String selfLink = "";
         try {
             JSONObject uploadResult = uploader.uploadOnVirusTotal();
 
@@ -61,7 +60,6 @@ public class Analyzer {
                 analysisResult = new JSONObject(analysisResponse.body());
 
                 String status = analysisResult.getJSONObject("data").getJSONObject("attributes").getString("status");
-                selfLink = analysisResult.getJSONObject("data").getJSONObject("links").getString("self");
                 log.info("Analyze status: {}", status);
 
                 if (status.equals("completed")) {
@@ -74,7 +72,7 @@ public class Analyzer {
         } catch (IOException | InterruptedException | TelegramApiException e) {
             log.error(e.getMessage());
         }
-        log.info("Sent report ({})", selfLink);
+        log.info("Sent report");
         return analysisResult;
     }
 }

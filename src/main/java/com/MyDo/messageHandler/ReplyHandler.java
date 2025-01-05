@@ -4,8 +4,6 @@ import com.MyDo.bot.Bot;
 import com.MyDo.locker.AccessChecker;
 import com.MyDo.locker.UserData;
 import com.MyDo.tool.InlineKeyboardMarkupBuilder;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 
@@ -26,7 +24,6 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMa
  */
 
 public class ReplyHandler implements MessageHandler {
-    private static final Logger log = LoggerFactory.getLogger(ReplyHandler.class);
 
     @Override
     public void getResponse(Update update) {
@@ -34,7 +31,6 @@ public class ReplyHandler implements MessageHandler {
 
         if (update.getCallbackQuery().getData().equals("get-users-id")) {
             Bot.getINSTANCE().sendDocument(chatId, UserData.getPath());
-            log.info("Sent {}", UserData.getPath());
         } else if (update.getCallbackQuery().getData().equals("switch-subscription")) {
             AccessChecker.switchSubscriptionToggle();
             InlineKeyboardMarkup keyboard = InlineKeyboardMarkupBuilder.buildAdminPanel();
