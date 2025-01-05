@@ -39,6 +39,12 @@ files and links directly from your favorite messenger.
 
 First, you need to create a bot using [BotFather](https://t.me/BotFather).
 
+### 💾 Downloading
+
+1. Download the bot [archive](https://github.com/MrDoodeth/VirusTotalTGBot/releases) (e.g.,
+   `VirusTotalTGBot-1.0.0-archive.tar.gz`) and unpack it to a directory of your choice.
+2. ️Open the directory in your terminal.
+
 ### 📋 Config Editing
 
 To use the bot, you will need your **User ID** and **Channels IDs**. Use [this bot](https://t.me/getmyid_bot) to
@@ -47,12 +53,10 @@ get them:
 - Forward a message from a channel to get its chat ID.
 - Edit `config.json` to update the required fields.
 
-### 💾 Downloading
-
-1.  Download the bot archive and unpack it to a directory of your choice.
-2.  ️Open the directory in your terminal.
-
 ### 🛠 Environment variables
+
+Before entering commands, you first need to become a **ROOT**. Enter `sudo su` on Linux or run cmd as an administrator
+in Windows.
 
 - **TG_BOT_API**: Your Telegram Bot API token. Obtain it from [BotFather](https://t.me/BotFather).
 - **TG_BOT_NAME**: The name of your Telegram Bot (e.g., `@BotName`).
@@ -78,9 +82,18 @@ Use the following commands to set these variables for the current terminal sessi
 
 ### 🚀 Start
 
-- To start the bot, run the following command: `java -cp "bin/VTTGB.jar:lib/*" com.MyDo.Program`
-- If everything is configured correctly, you should see the following output:
-  `<time> [main] INFO  com.MyDo.Program - Bot started`
+To start the bot, run the following command:
+
+#### Linux/MacOS
+
+`java -cp "bin/<jar-archive-name>.jar:lib/*" com.MyDo.Program`
+
+#### Windows
+
+`java -cp "bin\<jar-archive-name>.jar;lib\*" com.MyDo.Program`
+
+If everything is configured correctly, you should see the following output:
+`<time> [main] INFO  com.MyDo.Program - Bot started`
 
 ## 🔍 How to Use
 
