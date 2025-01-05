@@ -1,0 +1,21 @@
+VirusTotalTGBot
+Copyright 2025 MrDoodeth
+
+This NOTICE file is provided for informational purposes and to comply with third-party license requirements.
+
+This product uses third-party libraries with the following licenses:
+
+1. Telegram Bots API (https://github.com/rubenlagus/TelegramBots) — MIT License
+   License text: https://opensource.org/licenses/MIT
+
+2. Jackson JSON (https://github.com/FasterXML/jackson) — Apache License 2.0
+   License text: https://www.apache.org/licenses/LICENSE-2.0
+
+3. SLF4J (https://github.com/qos-ch/slf4j) — MIT License
+   License text: https://opensource.org/licenses/MIT
+
+4. Logback Classic (https://github.com/qos-ch/logback) — Eclipse Public License 1.0
+   License text: https://www.eclipse.org/legal/epl-v10.html
+   and
+   GNU Lesser General Public License 2.1
+   License text: https://www.gnu.org/licenses/old-licenses/lgpl-2.1.html

@@ -1,0 +1,29 @@
+<configuration>
+    <property name="TIME-PATTERN" value="%d{dd-MM-yyyy HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n" />
+    <property name="LOG-DIR" value="logs/app.log" />
+
+    <!-- Вывод в консоль -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>${TIME-PATTERN}</pattern>
+        </encoder>
+    </appender>
+
+    <!-- Вывод в файл -->
+    <appender name="FILE" class="ch.qos.logback.core.FileAppender">
+        <file>${LOG-DIR}</file>
+        <append>true</append>
+        <encoder>
+            <pattern>${TIME-PATTERN}</pattern>
+        </encoder>
+    </appender>
+
+    <logger name="org.telegram" level="debug">
+        <appender-ref ref="FILE"/>
+    </logger>
+
+    <root level="debug">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="FILE"/>
+    </root>
+</configuration>

@@ -1,6 +1,4 @@
-package com.MyDo.messageHandler;
-
-import org.telegram.telegrambots.meta.api.objects.Update;
+package com.MyDo.locker;
 
 /*
  * Copyright 2025 MrDoodeth
@@ -18,6 +16,9 @@ import org.telegram.telegrambots.meta.api.objects.Update;
  * limitations under the License.
  */
 
-public interface MessageHandler {
-    void getResponse(Update update);
+public enum UserStatus {
+    BLOCKED,
+    ACCESS,
+    FORBIDDEN,
+    ADMINISTRATOR
 }
