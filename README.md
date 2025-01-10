@@ -93,6 +93,7 @@ To start the bot, run the following command:
 `java -cp "bin\<jar-archive-name>.jar;lib\*" com.MyDo.Program`
 
 If everything is configured correctly, you should see the following output:
+
 `<time> [main] INFO  com.MyDo.Program - Bot started`
 
 ## 🔍 How to Use
