@@ -9,8 +9,8 @@
   <a href="https://opensource.org/licenses/Apache-2.0">
     <img src="https://img.shields.io/badge/Apache%202.0-blue.svg?style=flat&label=License" alt="license" style="height: 20px;">
   </a>
-  <img src='https://img.shields.io/github/stars/MrDoodeth/VirusTotalTGBot?label=Stars&style=flat&color=%23FFB31A' />
-  <img src='https://img.shields.io/github/followers/MrDoodeth?label=Follow&style=flat&color=%23FFB31A' />
+  <img src='https://img.shields.io/github/stars/MrDoodeth/VirusTotalTGBot?label=Stars&style=flat&color=FFB31A' />        
+  <img src='https://img.shields.io/github/followers/MrDoodeth?label=Follow&style=flat&color=FFB31A' />
 </p>
 
 🦠**VirusTotalTGBot**👾 is a simple Telegram bot that uses the VirusTotal API to scan files and links. It provides
